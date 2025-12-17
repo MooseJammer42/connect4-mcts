@@ -165,18 +165,22 @@
         <button class="reset-btn" onclick="resetGame()">New Game</button>
     </div>
 
-    <script>
+    <script type="module">
+        import { Board } from './table.js';
+
         const ROWS = 7;
         const COLS = 7;
         let board = [];
+        let computerBoard;
         let currentPlayer = 1;
         let humanPlayers = [1];
         let computerPlayers = [2];
         let gameOver = false;
+        let simuli = 10000;
 
         function initBoard() {
             board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
-            computerBoard = new Board(table);
+            computerBoard = new Board(board);
             currentPlayer = 1;
             gameOver = false;
             
@@ -295,6 +299,9 @@
         function updateStatus() {
             document.getElementById('status').textContent = `Player ${currentPlayer}'s Turn`;
             document.getElementById('indicator').style.background = currentPlayer === 1 ? '#e74c3c' : '#f1c40f';
+            if(!gameOver && computerPlayers.includes(currentPlayer)){
+                computerBoard.mcts(simuli);
+            }
         }
 
         function resetGame() {

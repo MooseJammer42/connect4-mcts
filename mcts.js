@@ -1,5 +1,11 @@
 import { Node } from './nodes.js';
-import assert from 'assert';
+
+// Browser-compatible assert function
+function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message || "");
+    }
+}
 
 function monte_simulation(board,simulations,{verbose=0,print_eval=false}={}){
     board.rollout_set_up();

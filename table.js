@@ -1,6 +1,15 @@
 // import { table } from "console";
-import assert from 'assert';
+// Browser-compatible assert function
+// x = 1 o = 2 empty = 0, this is the kind of table you need to put in
+
+function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message || "");
+    }
+}
+
 import {randint} from './utils.js';
+import { monte_simulation } from './mcts.js';
 
 class Board{
     constructor(table){
@@ -333,6 +342,9 @@ class Board{
             if(n !== -1) legal_moves += 1;
         }
         return legal_moves;
+    }
+    mcts(simuli){
+        monte_simulation(this,simuli);
     }
 }
 
