@@ -182,13 +182,13 @@ class Board{
         let totalo = 0;
         for(let n = 0; n < this.height; n++){
             for(let k = 0; k < this.width; k++){
-                if (this.table[n][k] === 'x'){
+                if (this.table[n][k] === 1){
                     totalx +=1;
                     for(let value of this.lol[n+(this.height*k)]){
                         this.root_sec_list[value] += 1
                     }
                     this.toggle_bit_setup(n+(this.height*k),1)
-                }else if(this.table[n][k] === 'o'){
+                }else if(this.table[n][k] === 2){
                     totalo +=1;
                     for(let value of this.lol[n+(this.height*k)]){
                         this.root_sec_list[value] -= 1
@@ -268,7 +268,7 @@ class Board{
             let n = this.height - 1;
             let found = false;
             while(n >= 0 && !found){
-                if(this.table[n][k] === ' ') found = true;
+                if(this.table[n][k] === 0) found = true;
                 else n -= 1;
             }
             possible_moves.push(n);
@@ -286,7 +286,7 @@ class Board{
     table_update(move){
         const k = move;
         const n = this.root_possible_moves[move];
-        const char = (this.root_turn === 1) ? 'x' : 'o';
+        const char = (this.root_turn === 1) ? 1 : 2;
         this.table[n][k] = char;
         this.last_move = [n,k];
         this.root_setup();
@@ -344,7 +344,7 @@ class Board{
         return legal_moves;
     }
     mcts(simuli){
-        monte_simulation(this,simuli);
+        return monte_simulation(this,simuli);
     }
 }
 

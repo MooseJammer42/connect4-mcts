@@ -171,7 +171,7 @@
         const ROWS = 7;
         const COLS = 7;
         let board = [];
-        let computerBoard;
+        let computerEngine;
         let currentPlayer = 1;
         let humanPlayers = [1];
         let computerPlayers = [2];
@@ -180,7 +180,7 @@
 
         function initBoard() {
             board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
-            computerBoard = new Board(board);
+            computerEngine = new Board(board);
             currentPlayer = 1;
             gameOver = false;
             
@@ -211,6 +211,7 @@
             for (let row = ROWS - 1; row >= 0; row--) {
                 if (board[row][col] === 0) {
                     board[row][col] = currentPlayer;
+                    computerEngine.table_update(col);
                     const cell = document.getElementById(`cell-${row}-${col}`);
                     cell.classList.add(currentPlayer === 1 ? 'red' : 'yellow');
                     
@@ -300,7 +301,8 @@
             document.getElementById('status').textContent = `Player ${currentPlayer}'s Turn`;
             document.getElementById('indicator').style.background = currentPlayer === 1 ? '#e74c3c' : '#f1c40f';
             if(!gameOver && computerPlayers.includes(currentPlayer)){
-                computerBoard.mcts(simuli);
+                const computerMove = computerEngine.mcts(simuli);
+                dropPiece(computerMove);
             }
         }
 
