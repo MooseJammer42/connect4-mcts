@@ -162,7 +162,7 @@
             </div>
         </div>
         <div class="board" id="board"></div>
-        <button class="reset-btn" onclick="resetGame()">New Game</button>
+        <button class="reset-btn" id="reset-btn">New Game</button>
     </div>
 
     <script type="module">
@@ -309,6 +309,9 @@
         function resetGame() {
             initBoard();
         }
+
+        // Add event listener for reset button
+        document.getElementById('reset-btn').addEventListener('click', resetGame);
 
         initBoard();
     </script>
