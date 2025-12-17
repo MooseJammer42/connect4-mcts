@@ -173,13 +173,13 @@ class Board{
         let totalo = 0;
         for(let n = 0; n < this.height; n++){
             for(let k = 0; k < this.width; k++){
-                if (this.table[n][k] == 'x'){
+                if (this.table[n][k] === 'x'){
                     totalx +=1;
                     for(let value of this.lol[n+(this.height*k)]){
                         this.root_sec_list[value] += 1
                     }
                     this.toggle_bit_setup(n+(this.height*k),1)
-                }else if(this.table[n][k] == 'o'){
+                }else if(this.table[n][k] === 'o'){
                     totalo +=1;
                     for(let value of this.lol[n+(this.height*k)]){
                         this.root_sec_list[value] -= 1

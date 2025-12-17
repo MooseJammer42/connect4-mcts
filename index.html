@@ -166,14 +166,17 @@
     </div>
 
     <script>
-        const ROWS = 8;
-        const COLS = 8;
+        const ROWS = 7;
+        const COLS = 7;
         let board = [];
         let currentPlayer = 1;
+        let humanPlayers = [1];
+        let computerPlayers = [2];
         let gameOver = false;
 
         function initBoard() {
             board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+            computerBoard = new Board(table);
             currentPlayer = 1;
             gameOver = false;
             
@@ -183,7 +186,7 @@
             for (let col = 0; col < COLS; col++) {
                 const columnDiv = document.createElement('div');
                 columnDiv.className = 'column';
-                columnDiv.onclick = () => dropPiece(col);
+                columnDiv.onclick = () => {if(humanPlayers.includes(currentPlayer)) dropPiece(col);}
                 
                 for (let row = 0; row < ROWS; row++) {
                     const cell = document.createElement('div');
