@@ -68,7 +68,7 @@ function myMain(){
         if(test_table !== undefined){
             table = structuredClone(test_table);
         }else{
-            table = new Array(height).fill(new Array(width).fill(' '));
+            table = new Array(height).fill(NaN).map(()=>new Array(width).fill(' '));
             console.log(table);
         }
         let simuli = params.simuli;
@@ -86,9 +86,9 @@ function myMain(){
         }
         console.log(simuli,height,width);
         if(params.playitself > 0){
-            play_itself(table,simuli,save_time=params.timefile,verbose=params.verbose);
+            play_itself(table,simulations = simuli,save_time=params.timefile,verbose=params.verbose);
         }else{
-            man_vs_machine(table,width,simulations=simuli,verbose=params.verbose);
+            man_vs_machine(table,{simulations: simuli,verbose:params.verbose});
         }
         break
     }

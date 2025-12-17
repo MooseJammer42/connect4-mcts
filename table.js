@@ -6,7 +6,7 @@ class Board{
     constructor(table){
         this.table = table;
         this.height = this.table.length;
-        this.width = this.table.at(0).length;
+        this.width = this.table[0].length;
         this.lol = this.lol_createion();
         this.root_sec_list = new Array(this.width*this.height*4).fill(0);
         this.rollout_sec_list = new Array(this.width*this.height*4).fill(0);
@@ -33,7 +33,7 @@ class Board{
     if you follow this order you only have to check these directions for each one
     */
     lol_createion() {
-        const lol = new Array(this.height*this.width).fill(new Array());
+        const lol = new Array(this.height*this.width).fill(NaN).map(()=>new Array());
         const down_constant = this.height * this.width * 0; 
         const right_constant = this.height * this.width * 1;
         const dr_constant = this.height * this.width * 2;
@@ -117,10 +117,10 @@ class Board{
         return 0;
     }
     rollout_set_up(){
-        for(let i = 0; i < this.root_sec_list ; i++){
+        for(let i = 0; i < this.root_sec_list.length ; i++){
             this.rollout_sec_list[i] = this.root_sec_list[i];
         }
-        for(let i = 0; i < this.width; i++){
+        for(let i = 0; i < this.width ; i++){
             this.rollout_find_move[i] = 0;
             this.rollout_possible_moves[i] = this.root_possible_moves[i];
         }
@@ -129,7 +129,7 @@ class Board{
         this.rollout_hash[0] = this.root_hash[0]
         this.rollout_hash[1] = this.root_hash[1]
     }
-    untired_moves(children_moves){
+    untried_moves(children_moves){
         for(let i = 0; i < this.width; i++){
             this.rollout_find_move[i] = 0;
         }
@@ -139,10 +139,12 @@ class Board{
         for(let child_move of children_moves){
             this.rollout_find_move[child_move] = -1;
         }
-        return this.random_legal_untried_move();
+        const moveSelected = this.random_legal_untried_move();
+        assert(!children_moves.includes(moveSelected));
+        return moveSelected
     }
     random_legal_untried_move(){
-        const legal_moves = 0;
+        let legal_moves = 0;
         for(let i = 0; i < this.width; i++){
             if(this.rollout_find_move[i] !== -1){
                 this.random_move_bucket[legal_moves] = i;
@@ -150,6 +152,12 @@ class Board{
             }     
         }
         legal_moves -= 1;
+        // todo delete the catch
+        try{
+            assert(legal_moves !== -1);
+        }catch{
+            console.log('wtf');
+        }
         assert(legal_moves !== -1);
         // going to return legal moves, then can catch fully expanded right away
         const random_move = this.random_move_bucket[randint(0, legal_moves)];
@@ -161,8 +169,8 @@ class Board{
         for(let n = 0; n < this.root_sec_list.length; n++){
             this.root_sec_list[n] = 0;
         }
-        const totalx = 0;
-        const totalo = 0;
+        let totalx = 0;
+        let totalo = 0;
         for(let n = 0; n < this.height; n++){
             for(let k = 0; k < this.width; k++){
                 if (this.table[n][k] == 'x'){
@@ -186,6 +194,11 @@ class Board{
     }
     sec_int_3(move,three){
         const lol_index = this.rollout_possible_moves[move] + move * this.height;
+        try{
+            assert(lol_index < this.lol.length);
+        }catch{
+            assert(lol_index < this.lol.length);
+        }
         for(let n of this.lol[lol_index]){
             if(this.rollout_sec_list[n] === three) return true;
         }
@@ -195,6 +208,11 @@ class Board{
         // check if 3 but if not also adds
         const three = (this.rollout_turn === 1) ? 3 : -3;
         const lol_index = this.rollout_possible_moves[move] + move * this.height;
+        try{
+            assert(lol_index < this.lol.length);
+        }catch{
+            assert(lol_index < this.lol.length);
+        }
         for(let n of this.lol[lol_index]){
             if(this.rollout_sec_list[n] === three) return true;
             else this.rollout_sec_list[n] += this.rollout_turn;
@@ -204,6 +222,12 @@ class Board{
     rollout_move(move){
         this.rollout_total_moves += 1;
         const lol_index = this.rollout_possible_moves[move] + move * this.height;
+        try{
+            assert(lol_index < this.lol.length);
+        }catch{
+            assert(lol_index < this.lol.length);
+        }
+        assert(lol_index < this.lol.length);
         for(let n of this.lol[lol_index]){
             this.rollout_sec_list[n] += this.rollout_turn;
         }
@@ -286,27 +310,28 @@ class Board{
                 }else{
                     let [normal,highlight,bright,three,four] = (this.table[n][k] === 'x') ? ["[31m","[41m","[91m",3,4] : ["[34m","[44m","[96m",-3,-4];
                     if(n === this.last_move.at(0) && k === this.last_move.at(1)){
-                        print_table_new += `   \x1b${highlight}${self.table[n][k]}\x1b[0m   |`;
+                        print_table_new += `   \x1b${highlight}${this.table[n][k]}\x1b[0m   |`;
                     }else{
                         let broke = false;
-                        for(let value of this.lol[n+(self.height*k)]){
+                        for(let value of this.lol[n+(this.height*k)]){
                             if(this.root_sec_list[value] === four){
-                                print_table_new += `   \x1b${highlight}${self.table[n][k]}\x1b[0m   |`;
+                                print_table_new += `   \x1b${highlight}${this.table[n][k]}\x1b[0m   |`;
                                 broke = true;
                                 break;
                             }
                         }
                         if(!broke){
-                            for(let value of this.lol[n+(self.height*k)]){
+                            for(let value of this.lol[n+(this.height*k)]){
                                 if(this.root_sec_list[value] === three){
-                                print_table_new += `   \x1b${bright}${self.table[n][k]}\x1b[0m   |`;
+                                print_table_new += `   \x1b${bright}${this.table[n][k]}\x1b[0m   |`;
                                 broke = true;
                                 break;
+                                }
                             }
                             if(!broke){
-                                print_table_new +=`   \x1b${normal}${self.table[n][k]}\x1b[0m   |`;
+                                print_table_new +=`   \x1b${normal}${this.table[n][k]}\x1b[0m   |`;
                             }
-                            }
+                            
                         }
                     }
                 }
@@ -325,8 +350,9 @@ class Board{
     }
 }
 
-const table = new Array(6).fill(new Array(7).fill(' '))
-const b = new Board(table);
-b.table_print();
+// const tableee = new Array(6).fill(NaN).map(()=>new Array(7).fill(' '))
+// console.log(tableee);
+// const b = new Board(tableee);
+// b.table_print();
 
 export{Board};

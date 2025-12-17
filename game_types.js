@@ -7,7 +7,7 @@ import asci_art from './asci_art/art.json' with { type: 'json' };
 
 
 function play_itself(table,simulations=1000,save_time="",verbose = 0){
-    const board = Board(table);
+    const board = new Board(table);
     let [is_game_over,winner] = board.check_root_gameover();
     while(!is_game_over){
         try{
@@ -46,36 +46,39 @@ function play_itself(table,simulations=1000,save_time="",verbose = 0){
     }
 }
 
-function man_vs_machine(table,width,simulations = 100000,player_turn=True,verbose=0){
-    const board = Board(table);
+function man_vs_machine(table,{simulations = 100000,player_turn= true,verbose= 0}={}){
+    const board = new Board(table)
     let old_board = '';
     let [is_game_over,winner] = board.check_root_gameover();
     board.table_print();
     let lets_play = true;
+    let move;
     while(!is_game_over && lets_play){
         if(player_turn){
             while(1){
                 try{
-                    const move = parseInt(p(`input 1-${width}: `)) - 1
+                    move = parseInt(p(`input 1-${board.width}: `)) - 1
                     assert(Number.isInteger(move));
-                    if(move < width && move >= 0){
+                    if(move < board.width && move >= 0){
                         if(board.root_possible_moves[move] != -1){
                             break;
                         }
                     }
                 }catch{
-                    console.log("Enter a valid number!");
+                    console.log("\nEnter a valid number!");
+                    move = parseInt(p(`2 to exit or try again: `))
+                    if(move===2) process.exit(0);
                 }
             }
         }else{
-            const move = monte_simulation(board,simulations,verbose=verbose,print_eval=True);
+            move = monte_simulation(board,simulations,{verbose:verbose,print_eval:true});
         }
         if(!lets_play) break;
         if(player_turn) old_board = structuredClone(board);
         board.table_update(move);
         console.log(board.table);
-        board.table_print;
-        [is_game_over,width] = board.check_root_gameover();
+        board.table_print();
+        [is_game_over,winner] = board.check_root_gameover();
         player_turn = !player_turn;
     }
     if(winner === 1){
