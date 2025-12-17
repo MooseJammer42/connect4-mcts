@@ -11,8 +11,8 @@ class Node{
         this.terminal_move = terminal_move;
         this.anti_terminal = anti_terminal;
         this.anti_terminal_move = anti_terminal_move;
-        this.next_turn = Board.root_turn;
-        this.last_turn = Board.root_turn*-1;
+        this.next_turn = Board.rollout_turn;
+        this.last_turn = Board.rollout_turn*-1;
         this.wins = 0;
         //adding this so it can go for tie worst comes to worst
         this.losses = 0;
@@ -36,11 +36,11 @@ class Node{
             node.visits += 1;
         }
     }
-    ucb_select(exploration = 1, if_print = false){
+    ucb_select(exploration = .7, if_print = false){
         const ucb_ratios = [];
         for(const child of this.children){
             // if child can win then our win ratio is 0 else ucb formula
-            const ratio = (child.terminal_bool === true) ? 0 : (child.wins/child.visits) + (exploration * (Math.sqrt(Math.log(this.visits) / child.visits)))
+            const ratio = (child.terminal_bool) ? 0 : (child.wins/child.visits) + (exploration * (Math.sqrt(Math.log(this.visits) / child.visits)))
             ucb_ratios.push(ratio);
         }
         let maxIndex = 0;

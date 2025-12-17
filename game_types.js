@@ -71,7 +71,10 @@ function man_vs_machine(table,{simulations = 100000,player_turn= true,verbose= 0
                 }
             }
         }else{
+            const start = new Date();
             move = monte_simulation(board,simulations,{verbose:verbose,print_eval:true});
+            const end = new Date();
+            console.log(`time: ${(end-start)/1000}`)
         }
         if(!lets_play) break;
         if(player_turn) old_board = structuredClone(board);

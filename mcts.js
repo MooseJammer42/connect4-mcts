@@ -82,4 +82,12 @@ function add_child(node,Board,move,Map){
     return [new_node,inHash];
 }
 
+// assert that node possible moves == rollout possible moves
+function arr_compare(arr1,arr2){
+    assert(arr1.length === arr2.length)
+    for(let i = 0; i < arr1.length; i++){
+        assert(arr1[i] === arr2[i]);
+    }
+}
+
 export {monte_simulation};

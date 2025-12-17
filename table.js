@@ -18,8 +18,8 @@ class Board{
         this.root_total_moves = 0;
         this.rollout_total_moves = 0;
         this.rollout_turn = 0;
-        this.root_hash = [0,0];
-        this.rollout_hash = [0,0];
+        this.root_hash = [0n,0n];
+        this.rollout_hash = [0n,0n];
         this.root_setup();
         // for print table highlighting
         this.last_move = [undefined,undefined];
@@ -194,11 +194,6 @@ class Board{
     }
     sec_int_3(move,three){
         const lol_index = this.rollout_possible_moves[move] + move * this.height;
-        try{
-            assert(lol_index < this.lol.length);
-        }catch{
-            assert(lol_index < this.lol.length);
-        }
         for(let n of this.lol[lol_index]){
             if(this.rollout_sec_list[n] === three) return true;
         }
@@ -208,11 +203,7 @@ class Board{
         // check if 3 but if not also adds
         const three = (this.rollout_turn === 1) ? 3 : -3;
         const lol_index = this.rollout_possible_moves[move] + move * this.height;
-        try{
-            assert(lol_index < this.lol.length);
-        }catch{
-            assert(lol_index < this.lol.length);
-        }
+    
         for(let n of this.lol[lol_index]){
             if(this.rollout_sec_list[n] === three) return true;
             else this.rollout_sec_list[n] += this.rollout_turn;
@@ -222,11 +213,6 @@ class Board{
     rollout_move(move){
         this.rollout_total_moves += 1;
         const lol_index = this.rollout_possible_moves[move] + move * this.height;
-        try{
-            assert(lol_index < this.lol.length);
-        }catch{
-            assert(lol_index < this.lol.length);
-        }
         assert(lol_index < this.lol.length);
         for(let n of this.lol[lol_index]){
             this.rollout_sec_list[n] += this.rollout_turn;
@@ -258,12 +244,12 @@ class Board{
 
     }
     toggle_bit_setup(bit_position, turn){
-        const mask = 1 << bit_position;
+        const mask = 1n << BigInt(bit_position);
         const hash_i = (turn===1) ? 0 : 1;
         this.root_hash[hash_i] ^= mask;
     }
     toggle_bit_rollout(bit_position, turn){
-        const mask = 1 << bit_position;
+        const mask = 1n << BigInt(bit_position);
         const hash_i = (turn===1) ? 0 : 1;
         this.rollout_hash[hash_i] ^= mask;
     }
