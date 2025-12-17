@@ -343,8 +343,8 @@ class Board{
         }
         return legal_moves;
     }
-    mcts(simuli){
-        return monte_simulation(this,simuli);
+    async mcts(simuli){
+        return await monte_simulation(this,simuli);
     }
 }
 

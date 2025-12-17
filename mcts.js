@@ -7,7 +7,7 @@ function assert(condition, message) {
     }
 }
 
-function monte_simulation(board,simulations,{verbose=0,print_eval=false}={}){
+async function monte_simulation(board,simulations,{verbose=0,print_eval=false,batches=10000}={}){
     board.rollout_set_up();
     const map = new Map();
     const rootNode = new Node(board,map);
@@ -19,6 +19,10 @@ function monte_simulation(board,simulations,{verbose=0,print_eval=false}={}){
     let node;
     let nodeBranch = [];
     while(rootNode.visits < simulations){
+        if(rootNode.visits % batches === 0){
+            // yield event loop for animations
+            await new Promise(resolve=>setTimeout(resolve,0));
+        }
         node = rootNode;
         nodeBranch.length = 0;
         board.rollout_set_up()

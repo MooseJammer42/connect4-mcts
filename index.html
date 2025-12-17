@@ -168,15 +168,15 @@
     <script type="module">
         import { Board } from './table.js';
 
-        const ROWS = 7;
-        const COLS = 7;
+        const ROWS = 10;
+        const COLS = 10;
         let board = [];
         let computerEngine;
         let currentPlayer = 1;
         let humanPlayers = [1];
-        let computerPlayers = [2];
+        let computerPlayers = [1,2];
         let gameOver = false;
-        let simuli = 10000;
+        let simuli = 111111;
 
         function initBoard() {
             board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
@@ -297,11 +297,13 @@
             return board[0].every(cell => cell !== 0);
         }
 
-        function updateStatus() {
+        async function updateStatus() {
             document.getElementById('status').textContent = `Player ${currentPlayer}'s Turn`;
             document.getElementById('indicator').style.background = currentPlayer === 1 ? '#e74c3c' : '#f1c40f';
+            // give control to event loop
+            // await new Promise(resolve=>setTimeout(resolve,100));
             if(!gameOver && computerPlayers.includes(currentPlayer)){
-                const computerMove = computerEngine.mcts(simuli);
+                const computerMove = await computerEngine.mcts(simuli);
                 dropPiece(computerMove);
             }
         }
