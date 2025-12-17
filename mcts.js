@@ -7,6 +7,8 @@ function assert(condition, message) {
     }
 }
 
+
+
 async function monte_simulation(board,simulations,{verbose=0,print_eval=false,batches=10000}={}){
     board.rollout_set_up();
     const map = new Map();
@@ -18,10 +20,11 @@ async function monte_simulation(board,simulations,{verbose=0,print_eval=false,ba
     if(rootNode.anti_terminal) return rootNode.anti_terminal_move;
     let node;
     let nodeBranch = [];
-    while(rootNode.visits < simulations){
+    while(rootNode.visits < simulations && !board.mctsAbortFlag){
         if(rootNode.visits % batches === 0){
             // yield event loop for animations
             await new Promise(resolve=>setTimeout(resolve,0));
+            if(board.mctsAbortFlag) break;
         }
         node = rootNode;
         nodeBranch.length = 0;
@@ -60,6 +63,9 @@ async function monte_simulation(board,simulations,{verbose=0,print_eval=false,ba
             nodeBranch.push(node);
             node.back_propugate(rolloutValue,nodeBranch)
         }
+    }
+    if(board.mctsAbortFlag){
+        return null; // Return null if aborted
     }
     node = rootNode.child_most_visited();
     const rolloutMove = rootNode.turn_most_visited();

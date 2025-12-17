@@ -18,11 +18,33 @@
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
         }
 
         .container {
             text-align: center;
-            padding: 20px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column-reverse;
+                align-items: center;
+            }
         }
 
         h1 {
@@ -150,35 +172,246 @@
         .reset-btn:active {
             transform: translateY(0);
         }
+
+        .settings-panel {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 350px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 1200px) {
+            .settings-panel {
+                width: 100%;
+                max-width: 600px;
+            }
+        }
+
+        .settings-panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-item label {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .setting-item input {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .setting-item input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .player-config {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .player-config label {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .player-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .player-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .start-game-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .start-game-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .start-game-btn:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Connect 4</h1>
-        <div class="game-info">
-            <div class="current-player">
-                <span id="status">Player 1's Turn</span>
-                <span class="player-indicator" id="indicator" style="background: #e74c3c;"></span>
+
+        <div class="main-content">
+            <div class="game-area">
+                <div class="game-info">
+                    <div class="current-player">
+                        <span id="status">Player 1's Turn</span>
+                        <span class="player-indicator" id="indicator" style="background: #e74c3c;"></span>
+                    </div>
+                </div>
+                <div class="board" id="board"></div>
+                <button class="reset-btn" id="reset-btn">New Game</button>
+            </div>
+
+            <div class="settings-panel">
+                <h2>Game Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label for="rows">Rows (4-15):</label>
+                        <input type="number" id="rows" min="1" max="30" value="6">
+                    </div>
+                    <div class="setting-item">
+                        <label for="cols">Columns (4-15):</label>
+                        <input type="number" id="cols" min="1" max="30" value="7">
+                    </div>
+                    <div class="setting-item">
+                        <label for="simulations">MCTS Simulations:</label>
+                        <input type="number" id="simulations" min="10" max="10000000" value="500" step="100">
+                    </div>
+                    <div class="player-config">
+                        <label style="grid-column: 1 / -1; margin-bottom: 5px;">Player Configuration:</label>
+                        <div class="player-checkbox">
+                            <input type="checkbox" id="player1-human" checked>
+                            <label for="player1-human">P1 Human</label>
+                        </div>
+                        <div class="player-checkbox">
+                            <input type="checkbox" id="player1-computer">
+                            <label for="player1-computer">P1 Computer</label>
+                        </div>
+                        <div></div>
+                        <div class="player-checkbox">
+                            <input type="checkbox" id="player2-human">
+                            <label for="player2-human">P2 Human</label>
+                        </div>
+                        <div class="player-checkbox">
+                            <input type="checkbox" id="player2-computer" checked>
+                            <label for="player2-computer">P2 Computer</label>
+                        </div>
+                    </div>
+                </div>
+                <button class="start-game-btn" id="start-game-btn">Start New Game</button>
             </div>
         </div>
-        <div class="board" id="board"></div>
-        <button class="reset-btn" id="reset-btn">New Game</button>
     </div>
 
     <script type="module">
         import { Board } from './table.js';
+        // import { abortMCTS } from './mcts.js';
 
-        const ROWS = 10;
-        const COLS = 10;
+        let ROWS = 6;
+        let COLS = 7;
         let board = [];
         let computerEngine;
         let currentPlayer = 1;
         let humanPlayers = [1];
-        let computerPlayers = [1,2];
+        let computerPlayers = [2];
         let gameOver = false;
-        let simuli = 111111;
+        let simuli = 555;
+
+        function readSettings() {
+            ROWS = parseInt(document.getElementById('rows').value);
+            COLS = parseInt(document.getElementById('cols').value);
+            simuli = parseInt(document.getElementById('simulations').value);
+
+            // Read player configuration
+            humanPlayers = [];
+            computerPlayers = [];
+
+            if (document.getElementById('player1-human').checked) {
+                humanPlayers.push(1);
+            }
+            if (document.getElementById('player1-computer').checked) {
+                computerPlayers.push(1);
+            }
+            if (document.getElementById('player2-human').checked) {
+                humanPlayers.push(2);
+            }
+            if (document.getElementById('player2-computer').checked) {
+                computerPlayers.push(2);
+            }
+
+            // Validation
+            if (ROWS < 1 || ROWS > 30) {
+                alert('Rows must be between 4 and 15');
+                return false;
+            }
+            if (COLS < 1 || COLS > 30) {
+                alert('Columns must be between 4 and 15');
+                return false;
+            }
+            if (simuli < 10 || simuli > 10000000) {
+                alert('Simulations must be at least 10 - 10million');
+                return false;
+            }
+
+            // Check that each player has exactly one type (human OR computer, not both or neither)
+            const player1Types = (document.getElementById('player1-human').checked ? 1 : 0) +
+                                (document.getElementById('player1-computer').checked ? 1 : 0);
+            const player2Types = (document.getElementById('player2-human').checked ? 1 : 0) +
+                                (document.getElementById('player2-computer').checked ? 1 : 0);
+
+            if (player1Types !== 1) {
+                alert('Player 1 must be either Human OR Computer (not both or neither)');
+                return false;
+            }
+            if (player2Types !== 1) {
+                alert('Player 2 must be either Human OR Computer (not both or neither)');
+                return false;
+            }
+
+            return true;
+        }
 
         function initBoard() {
+            // Abort any running MCTS computation
+            if(computerEngine !== undefined) computerEngine.mctsAbortFlag = true;
+            // abortMCTS();
+
+            if (!readSettings()) {
+                return;
+            }
+
             board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
             computerEngine = new Board(board);
             currentPlayer = 1;
@@ -303,8 +536,12 @@
             // give control to event loop
             // await new Promise(resolve=>setTimeout(resolve,100));
             if(!gameOver && computerPlayers.includes(currentPlayer)){
+                const currentEngine = computerEngine
                 const computerMove = await computerEngine.mcts(simuli);
-                dropPiece(computerMove);
+                // Only make the move if MCTS wasn't aborted (returns null when aborted)
+                if(computerMove !== null && !gameOver && currentEngine === computerEngine){
+                    dropPiece(computerMove);
+                }
             }
         }
 
@@ -312,7 +549,33 @@
             initBoard();
         }
 
-        // Add event listener for reset button
+        // Make checkboxes mutually exclusive for each player
+        document.getElementById('player1-human').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('player1-computer').checked = false;
+            }
+        });
+
+        document.getElementById('player1-computer').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('player1-human').checked = false;
+            }
+        });
+
+        document.getElementById('player2-human').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('player2-computer').checked = false;
+            }
+        });
+
+        document.getElementById('player2-computer').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('player2-human').checked = false;
+            }
+        });
+
+        // Add event listeners for buttons
+        document.getElementById('start-game-btn').addEventListener('click', resetGame);
         document.getElementById('reset-btn').addEventListener('click', resetGame);
 
         initBoard();

@@ -22,6 +22,7 @@ class Board{
         this.rollout_possible_moves = new Array(this.width).fill(0);
         this.rollout_find_move = new Array(this.width).fill(0);
         this.random_move_bucket = new Array(this.width).fill(0);
+        this.mctsAbortFlag = false;
         this.root_turn = 0;
         this.rollout_turn = 0;
         this.root_total_moves = 0;
