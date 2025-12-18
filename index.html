@@ -77,26 +77,27 @@
 
         .board {
             background: #0066cc;
-            padding: 20px;
+            padding: min(15px, 1.5vmin);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             display: inline-block;
             white-space: nowrap;
-            overflow-x: auto;
+            max-width: 98vw;
+            max-height: calc(100vh - 250px);
         }
 
         .column {
             display: inline-block;
             vertical-align: top;
-            margin: 0 5px;
+            margin: 0 min(2px, 0.2vmin);
         }
 
         .cell {
-            width: 70px;
-            height: 70px;
+            width: min(120px, calc((98vw - 30px) / var(--cols) - 4px), calc((100vh - 280px) / var(--rows) - 4px));
+            height: min(120px, calc((98vw - 30px) / var(--cols) - 4px), calc((100vh - 280px) / var(--rows) - 4px));
             background: white;
             border-radius: 50%;
-            margin: 5px;
+            margin: min(2px, 0.2vmin);
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
@@ -253,6 +254,68 @@
         .start-game-btn:active {
             transform: translateY(0);
         }
+
+        /* Mobile landscape optimizations */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                padding: 5px;
+                min-height: auto;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                padding: 5px 0;
+                margin-bottom: 5px;
+            }
+
+            .main-content {
+                gap: 8px;
+            }
+
+            .board {
+                max-height: calc(100vh - 80px);
+                padding: 8px;
+            }
+
+            .cell {
+                width: min(120px, calc((98vw - 20px) / var(--cols) - 4px), calc((100vh - 100px) / var(--rows) - 4px));
+                height: min(120px, calc((98vw - 20px) / var(--cols) - 4px), calc((100vh - 100px) / var(--rows) - 4px));
+                margin: 2px;
+            }
+
+            .column {
+                margin: 0 2px;
+            }
+
+            .settings-panel {
+                padding: 10px 15px;
+            }
+
+            .settings-panel h2 {
+                font-size: 1.1em;
+                margin-bottom: 8px;
+            }
+
+            .settings-grid {
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .game-info {
+                padding: 8px 15px;
+                margin-bottom: 8px;
+            }
+
+            .current-player {
+                font-size: 1.1em;
+            }
+
+            .start-game-btn {
+                padding: 8px;
+                font-size: 1em;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -391,25 +454,29 @@
             computerEngine = new Board(board);
             currentPlayer = 1;
             gameOver = false;
-            
+
             const boardEl = document.getElementById('board');
             boardEl.innerHTML = '';
-            
+
+            // Set CSS variables for responsive sizing
+            boardEl.style.setProperty('--rows', ROWS);
+            boardEl.style.setProperty('--cols', COLS);
+
             for (let col = 0; col < COLS; col++) {
                 const columnDiv = document.createElement('div');
                 columnDiv.className = 'column';
                 columnDiv.onclick = () => {if(humanPlayers.includes(currentPlayer)) dropPiece(col);}
-                
+
                 for (let row = 0; row < ROWS; row++) {
                     const cell = document.createElement('div');
                     cell.className = 'cell';
                     cell.id = `cell-${row}-${col}`;
                     columnDiv.appendChild(cell);
                 }
-                
+
                 boardEl.appendChild(columnDiv);
             }
-            
+
             updateStatus();
         }
 
