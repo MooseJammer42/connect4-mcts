@@ -1,6 +1,15 @@
 {
-  "dependencies": {
-    "prompt-sync": "^4.2.0"
+  "name": "connect-four",
+  "version": "1.0.0",
+  "description": "Connect Four game with AI",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
-  "type": "module"
+  "dependencies": {
+    "express": "^4.18.2",
+    "prompt-sync": "^4.2.0"
+  }
 }
