@@ -13,6 +13,9 @@ A Connect 4 game that uses Monte Carlo Tree Search (MCTS) for the AI opponent, w
 
 ## Getting Started
 
+### If My WebSite Works
+https://c4.walstrom.org
+
 ### Web GUI
 1. Start the server: `node server.js`
 2. Open your browser to the local server
