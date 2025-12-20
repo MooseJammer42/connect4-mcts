@@ -582,9 +582,15 @@
             // await new Promise(resolve=>setTimeout(resolve,100));
             if(!gameOver && computerPlayers.includes(currentPlayer)){
                 const currentEngine = computerEngine
+                const computeStart = Date.now();
                 const computerMove = await computerEngine.mcts(simuli);
                 // Only make the move if MCTS wasn't aborted (returns null when aborted)
                 if(computerMove !== null && !gameOver && currentEngine === computerEngine){
+                    if(humanPlayers.length > 0){
+                        const elapsedTime = Date.now() - computeStart;
+                        const aestheticWait = 500 - elapsedTime;
+                        if (aestheticWait > 0) await new Promise(resolve=>setTimeout(resolve,aestheticWait));
+                    }
                     dropPiece(computerMove);
                 }
             }
