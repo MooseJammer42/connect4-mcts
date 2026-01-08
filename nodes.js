@@ -2,7 +2,7 @@
 class Node{
     constructor(Board,Map){
         // since I do a rollout setup before rootNode creation this should work for every node
-        this.possible_moves = structuredClone(Board.rollout_possible_moves);
+        // this.possible_moves = structuredClone(Board.rollout_possible_moves);
         this.hash_value = `${Board.rollout_hash[0]},${Board.rollout_hash[1]}`;
         // terminal,result,move,anti_terminal,anti_terminal_move
         let [terminal_bool,terminal_result,terminal_move,anti_terminal,anti_terminal_move] = Board.check_node_terminal();

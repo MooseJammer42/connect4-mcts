@@ -11,15 +11,20 @@ A Connect 4 game that uses Monte Carlo Tree Search (MCTS) for the AI opponent, w
 - **Terminal Play**: Includes [main_cli.js](main_cli.js) for command-line gameplay
 - **Pure JavaScript**: Runs entirely in the browser
 
+## Notes on MCTS in connect four
+- Many move combinations transpose to the same board positions. I used a hash table so MCTS can use one node for each position. When it comes to back propugating though, you need to only update the moves that brought you there. Not all parent nodes. If you update all parent nodes this will mislead the AI to think that it's forcing the oppenent to that position. When many times only the move order is forcing the oppenent to the position. 
+
+
+- I found it important for a node to know if it has a game winning move (4 in a row) and if not then if it has a game winning prevention move (blocking the oppents 4 in a row) This will save many needless simulations. 
+
 ## Getting Started
 
 ### If My WebSite Works
 https://c4.walstrom.org
 
 ### Web GUI
-1. Start the server: `node server.js`
-2. Open your browser to the local server
-3. Play against the MCTS AI
+1. Git clone
+2. Open up index.html inside the folder with your web browser
 
 ### Terminal
 Run `node main_cli.js` to play in the terminal.
