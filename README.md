@@ -24,7 +24,7 @@ https://c4.walstrom.org
 
 ### Web GUI
 1. Git clone
-2. Open up index.html inside the folder with your web browser
+2. npm run dev or python -m http.server in directory
 
 ### Terminal
 Run `node main_cli.js` to play in the terminal.
