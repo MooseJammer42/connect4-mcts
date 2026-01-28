@@ -112,7 +112,22 @@ class Board{
         legal_moves -= 1;
         while(this.rollout_total_moves < this.height*this.width){
             assert(legal_moves != -1);
-            const random_i = randint(0,legal_moves);
+            const three = (this.rollout_turn === 1) ? 3 : -3
+            const nthree = three * -1
+            for(let i = 0; i < legal_moves; i++){
+                if(this.sec_int_3(this.random_move_bucket[i],three)) return this.rollout_turn;
+            }
+            let badMoves = 0;
+            for(let i = 0; i < legal_moves; i++){
+                if(this.sec_int_3_death(this.random_move_bucket[i],nthree)){
+                    // swap bad moves to the back but still in legal range
+                    const swap = this.random_move_bucket[legal_moves - badMoves];
+                    this.random_move_bucket[legal_moves - badMoves] = this.random_move_bucket[i];
+                    this.random_move_bucket[i] = swap;
+                    badMoves += 1;
+                }
+            }
+            const random_i = randint(0,Math.max(legal_moves-badMoves,0));
             const random_move = this.random_move_bucket[random_i];
             if (this.sec_int_3_rollout(random_move)) return this.rollout_turn;
             this.rollout_possible_moves[random_move] -= 1;
@@ -202,6 +217,7 @@ class Board{
         this.root_total_moves = totalo + totalx
         this.root_possible_moves = this.possible_simple()
     }
+    // check if there is a winner
     sec_int_3(move,three){
         const lol_index = this.rollout_possible_moves[move] + move * this.height;
         for(let n of this.lol[lol_index]){
@@ -209,6 +225,17 @@ class Board{
         }
         return false;
     }
+
+    sec_int_3_death(move,three){
+        // looks at 1 position above to see if oppenent auto wins
+        if(this.rollout_possible_moves[move] === 0) return false
+        const lol_index = this.rollout_possible_moves[move] - 1 + move * this.height;
+        for(let n of this.lol[lol_index]){
+            if(this.rollout_sec_list[n] === three) return true;
+        }
+        return false;
+    }
+
     sec_int_3_rollout(move){
         // check if 3 but if not also adds
         const three = (this.rollout_turn === 1) ? 3 : -3;
