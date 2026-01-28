@@ -119,6 +119,7 @@ class Board{
             }
             let randomMove;
             let random_i
+            // since winning move was checked, now can check antimove
             for(let i = 0; i < legal_moves; i++){
                 if(this.sec_int_3(this.random_move_bucket[i],nthree)){
                     randomMove = this.random_move_bucket[i]; // lol not random
@@ -127,6 +128,7 @@ class Board{
                 }
             }
             if(!randomMove){
+                // bad move is one that will lose immediately afterwards
                 let badMoves = 0;
                 for(let i = 0; i < legal_moves; i++){
                     if(this.sec_int_3_death(this.random_move_bucket[i],nthree)){
