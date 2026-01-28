@@ -117,21 +117,32 @@ class Board{
             for(let i = 0; i < legal_moves; i++){
                 if(this.sec_int_3(this.random_move_bucket[i],three)) return this.rollout_turn;
             }
-            let badMoves = 0;
+            let randomMove;
+            let random_i
             for(let i = 0; i < legal_moves; i++){
-                if(this.sec_int_3_death(this.random_move_bucket[i],nthree)){
-                    // swap bad moves to the back but still in legal range
-                    const swap = this.random_move_bucket[legal_moves - badMoves];
-                    this.random_move_bucket[legal_moves - badMoves] = this.random_move_bucket[i];
-                    this.random_move_bucket[i] = swap;
-                    badMoves += 1;
+                if(this.sec_int_3(this.random_move_bucket[i],nthree)){
+                    randomMove = this.random_move_bucket[i]; // lol not random
+                    random_i = i;
+                    break;
                 }
             }
-            const random_i = randint(0,Math.max(legal_moves-badMoves,0));
-            const random_move = this.random_move_bucket[random_i];
-            if (this.sec_int_3_rollout(random_move)) return this.rollout_turn;
-            this.rollout_possible_moves[random_move] -= 1;
-            if(this.rollout_possible_moves[random_move] === -1){
+            if(!randomMove){
+                let badMoves = 0;
+                for(let i = 0; i < legal_moves; i++){
+                    if(this.sec_int_3_death(this.random_move_bucket[i],nthree)){
+                        // swap bad moves to the back but still in legal range
+                        const swap = this.random_move_bucket[legal_moves - badMoves];
+                        this.random_move_bucket[legal_moves - badMoves] = this.random_move_bucket[i];
+                        this.random_move_bucket[i] = swap;
+                        badMoves += 1;
+                    }
+                }
+                random_i = randint(0,Math.max(legal_moves-badMoves,0));
+                randomMove = this.random_move_bucket[random_i];
+            }
+            if (this.sec_int_3_rollout(randomMove)) return this.rollout_turn;
+            this.rollout_possible_moves[randomMove] -= 1;
+            if(this.rollout_possible_moves[randomMove] === -1){
                 // like swap but only value in the front matters
                 this.random_move_bucket[random_i] = this.random_move_bucket[legal_moves];
                 legal_moves -= 1;
