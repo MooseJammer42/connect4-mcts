@@ -1,4 +1,5 @@
 */
+!static/
 !asci_art/
 !asci_art/**
 scratch.js

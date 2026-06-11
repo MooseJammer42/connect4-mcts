@@ -24,7 +24,9 @@ https://c4.walstrom.org
 
 ### Web GUI
 1. Git clone
-2. npm run dev or python -m http.server in directory
+2. npm run dev or python -m http.server in static/
+
+#### Or use the docker file
 
 ### Terminal
 Run `node main_cli.js` to play in the terminal.

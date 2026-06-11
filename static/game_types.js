@@ -3,7 +3,7 @@ import { monte_simulation } from './mcts.js';
 import prompt from 'prompt-sync';
 const p = prompt();
 import assert from 'assert';
-import asci_art from './asci_art/art.json' with { type: 'json' };
+import asci_art from '../asci_art/art.json' with { type: 'json' };
 
 
 function play_itself(table,simulations=1000,save_time="",verbose = 0){

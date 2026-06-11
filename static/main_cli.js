@@ -1,5 +1,5 @@
 import prompt from 'prompt-sync';
-import asci_art from './asci_art/art.json' with { type: 'json' };
+import asci_art from '../asci_art/art.json' with { type: 'json' };
 import assert from 'assert';
 import test_tables from './test_tables/tables.json' with {type:'json'};
 import {play_itself, man_vs_machine} from './game_types.js';
