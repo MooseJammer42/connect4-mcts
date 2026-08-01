@@ -5,6 +5,6 @@ COPY ./static /www
 
 WORKDIR /www
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["httpd", "-f", "-v", "-p", "80"]
+CMD ["httpd", "-f", "-v", "-p", "8080"]
